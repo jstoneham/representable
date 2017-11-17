@@ -60,18 +60,19 @@ module Representable::XML
 
     module AsWithNamespace
       def write(doc, fragment, as)
-        super(doc, fragment, prefixed(self, as))
+        super(doc, fragment, prefixed(self, as, false))
       end
 
       # FIXME: this is shit, the NestedOptions is executed too late here!
       def read(node, as)
-        super(node, prefixed(self, as))
+        super(node, prefixed(self, as, true))
       end
 
       private
-      def prefixed(dfn, as)
+      def prefixed(dfn, as, default_namespace)
         uri    = dfn[:namespace] # this is generic behavior and per property
-        prefix = dfn[:namespace_defs][uri]
+        # when evaluating XPaths, Nokogiri requires the namespace even if defaulted; we keep default namespace as 'xmlns'
+        prefix = dfn[:namespace_defs][uri] || ('xmlns' if default_namespace)
         as     = Namespace::Namespaced(prefix, as)
       end
     end

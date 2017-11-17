@@ -58,6 +58,7 @@ class NamespaceXMLTest < Minitest::Spec
   end
 
   let (:book) { Model::Book.new(1, 666) }
+  let (:empty_book) { Model::Book.new(nil, nil) }
 
   #:simple-class
   class Library < Representable::Decorator
@@ -66,7 +67,7 @@ class NamespaceXMLTest < Minitest::Spec
 
     namespace "http://eric.van-der-vlist.com/ns/library"
 
-    property :book do
+    property :book, class: Model::Book do
       namespace "http://eric.van-der-vlist.com/ns/library"
 
       property :id,  attribute: true
@@ -97,6 +98,20 @@ class NamespaceXMLTest < Minitest::Spec
     </library>}
     #:simple-xml end
     )
+  end
+
+  it "parses" do
+    #:parse-call
+    lib = Library.new(Model::Library.new(empty_book)).from_xml(%{<library
+  xmlns="http://eric.van-der-vlist.com/ns/library">
+  <book id="1">
+    <isbn>666</isbn>
+  </book>
+</library>}
+    #:parse-call end
+    )
+
+    lib.book.inspect.must_equal %{#<struct NamespaceXMLTest::Model::Book id=\"1\", isbn=\"666\">}
   end
 end
 
