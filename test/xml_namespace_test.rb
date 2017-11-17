@@ -1,4 +1,5 @@
 require "test_helper"
+require 'pry'
 
 # <lib:library
 #    xmlns:lib="http://eric.van-der-vlist.com/ns/library"

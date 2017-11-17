@@ -6,6 +6,7 @@ group :test do
   gem 'nokogiri', '~> 1.6.8', require: false
   gem "multi_json", require: false
   gem "minitest-line"
+  gem 'pry-byebug'
 end
 
 # gem "declarative", path: "../declarative"
